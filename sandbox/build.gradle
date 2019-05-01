@@ -1,0 +1,11 @@
+apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = 'java_pft.sandbox.MyFirstProgram.java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.testng:testng:6.14.3'
+}
