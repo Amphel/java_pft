@@ -63,7 +63,7 @@ public class OrderCreation extends ru.stqa.pft.leroymerlin.tests.TestBase {
     findCatalogue.perform();
 
 
-    Thread.sleep(500);
+    Thread.sleep(1000);
 
 
     Actions findStroymateriali = new Actions(app.getLeroymerlinHelper().driver);
