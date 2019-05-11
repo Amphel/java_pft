@@ -3,7 +3,7 @@ package ru.stqa.pft.leroymerlin.appmanager;
 import org.openqa.selenium.WebDriver;
 
 public class NavigationHelper {
-    public WebDriver driver;
+    private WebDriver driver;
 
     public NavigationHelper(WebDriver driver) {
         this.driver = driver;

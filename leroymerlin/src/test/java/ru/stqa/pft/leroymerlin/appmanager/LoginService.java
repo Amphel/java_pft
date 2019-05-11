@@ -6,14 +6,23 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SessionHelper {
-    public WebDriver driver;
+public class LoginService {
 
-    public SessionHelper(WebDriver driver) {
-        this.driver = driver;
+    public WebDriver driver;
+    protected NavigationHelper navigationHelper;
+
+    public void login() {
+      navigationHelper.goToMainPage();
+      initSignInAccount();
+      fillSignInForm("testqualityapp@gmail.com", "admin10071856");
     }
 
-    public void fillSignInForm(String username, String password) {
+    private void initSignInAccount() {
+        WebElement personalAccount = driver.findElement(By.xpath("//span[text()='Вход']"));
+        personalAccount.click();
+    }
+
+    private void fillSignInForm(String username, String password) {
         WebElement iframe = driver.findElement(By.id("oauth-iframe"));
         driver.switchTo().frame(iframe);
         driver.findElement(By.id("username")).click();
@@ -28,4 +37,15 @@ public class SessionHelper {
         wait.until(ExpectedConditions.elementToBeClickable(By.className("owl-item")));
     }
 
+    public void logout() throws InterruptedException {
+        //Войти в личный кабинет
+        WebElement myPersonalAccount = driver.findElement(By.className("user-account-button"));
+        myPersonalAccount.click();
+
+        Thread.sleep(1000);
+
+        //Выйти
+        WebElement logout = driver.findElement(By.className("logout"));
+        logout.click();
+    }
 }

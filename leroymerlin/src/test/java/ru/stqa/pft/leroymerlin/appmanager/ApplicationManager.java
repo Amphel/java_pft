@@ -4,18 +4,13 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
-
 import java.util.concurrent.TimeUnit;
-
 import static org.testng.Assert.fail;
 
 public class ApplicationManager {
+
     public WebDriver driver;
-
-    private SessionHelper sessionHelper;
-    private NavigationHelper navigationHelper;
-    private LeroymerlinHelper leroymerlinHelper;
-
+    private LoginService loginService = new LoginService();
     public boolean acceptNextAlert = true;
     public StringBuffer verificationErrors = new StringBuffer();
 
@@ -32,25 +27,25 @@ public class ApplicationManager {
 
         driver = new FirefoxDriver(options);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        leroymerlinHelper = new LeroymerlinHelper(driver);
-        navigationHelper = new NavigationHelper(driver);
-        sessionHelper = new SessionHelper(driver);
-        login();
+        loginService.navigationHelper = new NavigationHelper(driver);
+        loginService.driver = driver;
     }
 
-    public void login() {
-      navigationHelper.goToMainPage();
-      leroymerlinHelper.initSignInAccount();
-      sessionHelper.fillSignInForm("testqualityapp@gmail.com", "admin10071856");
-    }
-
-
-    public void stop() {
+    public void stop() throws InterruptedException {
         driver.quit();
         String verificationErrorString = verificationErrors.toString();
         if (!"".equals(verificationErrorString)) {
           fail(verificationErrorString);
         }
+    }
+
+
+    public void login() {
+        loginService.login();
+    }
+
+    public void logout() throws InterruptedException {
+        loginService.logout();
     }
 
     public boolean isElementPresent (By by){
@@ -86,11 +81,7 @@ public class ApplicationManager {
         }
       }
 
-    public LeroymerlinHelper getLeroymerlinHelper() {
-        return leroymerlinHelper;
-    }
-
     public NavigationHelper getNavigationHelper() {
-        return navigationHelper;
+        return loginService.navigationHelper;
     }
 }
