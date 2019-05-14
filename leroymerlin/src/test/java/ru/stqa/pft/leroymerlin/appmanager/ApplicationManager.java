@@ -39,7 +39,6 @@ public class ApplicationManager {
         }
     }
 
-
     public void login() {
         loginService.login();
     }

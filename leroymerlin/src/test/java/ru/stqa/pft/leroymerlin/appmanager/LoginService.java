@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.stqa.pft.leroymerlin.model.LoginData;
 
 public class LoginService {
 
@@ -14,27 +15,32 @@ public class LoginService {
     public void login() {
       navigationHelper.goToMainPage();
       initSignInAccount();
-      fillSignInForm("testqualityapp@gmail.com", "admin10071856");
+      fillSignInForm(new LoginData("testqualityapp@gmail.com", "admin10071856"));
     }
 
     private void initSignInAccount() {
-        WebElement personalAccount = driver.findElement(By.xpath("//span[text()='Вход']"));
-        personalAccount.click();
+        click(By.xpath("//span[text()='Вход']"));
     }
 
-    private void fillSignInForm(String username, String password) {
+    private void click(By locator) {
+        driver.findElement(locator).click();
+    }
+
+    private void fillSignInForm(LoginData loginData) {
         WebElement iframe = driver.findElement(By.id("oauth-iframe"));
         driver.switchTo().frame(iframe);
-        driver.findElement(By.id("username")).click();
-        driver.findElement(By.id("username")).clear();
-        driver.findElement(By.id("username")).sendKeys(username);
-        driver.findElement(By.id("password")).click();
-        driver.findElement(By.id("password")).clear();
-        driver.findElement(By.id("password")).sendKeys(password);
-        driver.findElement(By.id("login")).click();
+        type(By.id("username"), loginData.getUsername());
+        type(By.id("password"), loginData.getPassword());
+        click(By.id("login"));
         driver.switchTo().defaultContent();
-        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebDriverWait wait = new WebDriverWait(driver, 15);
         wait.until(ExpectedConditions.elementToBeClickable(By.className("owl-item")));
+    }
+
+    private void type(By locator, String text) {
+        click(locator);
+        driver.findElement(locator).clear();
+        driver.findElement(locator).sendKeys(text);
     }
 
     public void logout() throws InterruptedException {
