@@ -45,13 +45,11 @@ public class LoginService {
 
     public void logout() throws InterruptedException {
         //Войти в личный кабинет
-        WebElement myPersonalAccount = driver.findElement(By.className("user-account-button"));
-        myPersonalAccount.click();
+        click(By.className("user-account-button"));
 
         Thread.sleep(1000);
 
         //Выйти
-        WebElement logout = driver.findElement(By.className("logout"));
-        logout.click();
+        click(By.className("logout"));
     }
 }
