@@ -1,9 +1,13 @@
 package ru.stqa.pft.leroymerlin.appmanager;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.BrowserType;
+
 import java.util.concurrent.TimeUnit;
 import static org.testng.Assert.fail;
 
@@ -11,21 +15,34 @@ public class ApplicationManager {
 
     public WebDriver driver;
     private LoginService loginService = new LoginService();
-    public boolean acceptNextAlert = true;
-    public StringBuffer verificationErrors = new StringBuffer();
+    private boolean acceptNextAlert = true;
+    private StringBuffer verificationErrors = new StringBuffer();
+    private String browser;
+
+    public ApplicationManager(String browser) {
+        this.browser = browser;
+    }
 
     public void init() {
-        FirefoxProfile ffprofile = new FirefoxProfile();
-        ffprofile.setPreference("dom.webnotifications.enabled", false);
-        ffprofile.setPreference("geo.enabled", false);
-        ffprofile.setPreference("geo.provider.use_corelocation", false);
-        ffprofile.setPreference("geo.prompt.testing", false);
-        ffprofile.setPreference("geo.prompt.testing.allow", false);
+        if (browser.equals(BrowserType.FIREFOX)) {
+            FirefoxProfile ffprofile = new FirefoxProfile();
+            ffprofile.setPreference("dom.webnotifications.enabled", false);
+            ffprofile.setPreference("geo.enabled", false);
+            ffprofile.setPreference("geo.provider.use_corelocation", false);
+            ffprofile.setPreference("geo.prompt.testing", false);
+            ffprofile.setPreference("geo.prompt.testing.allow", false);
 
-        FirefoxOptions options = new FirefoxOptions();
-        options.setProfile(ffprofile);
+            FirefoxOptions options = new FirefoxOptions();
+            options.setProfile(ffprofile);
 
-        driver = new FirefoxDriver(options);
+            driver = new FirefoxDriver(options);
+
+        } else if (browser.equals(BrowserType.CHROME)) {
+            driver = new ChromeDriver();
+        } else if (browser.equals(BrowserType.IE)) {
+            driver = new InternetExplorerDriver();
+        }
+
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         loginService.navigationHelper = new NavigationHelper(driver);
         loginService.driver = driver;
@@ -39,7 +56,7 @@ public class ApplicationManager {
         }
     }
 
-    public void login() {
+    public void login() throws InterruptedException {
         loginService.login();
     }
 

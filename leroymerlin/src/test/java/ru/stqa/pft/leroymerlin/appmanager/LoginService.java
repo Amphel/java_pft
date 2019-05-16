@@ -12,7 +12,7 @@ public class LoginService {
     public WebDriver driver;
     protected NavigationHelper navigationHelper;
 
-    public void login() {
+    public void login() throws InterruptedException {
       navigationHelper.goToMainPage();
       initSignInAccount();
       fillSignInForm(new LoginData("testqualityapp@gmail.com", "admin10071856"));
@@ -26,15 +26,16 @@ public class LoginService {
         driver.findElement(locator).click();
     }
 
-    private void fillSignInForm(LoginData loginData) {
+    private void fillSignInForm(LoginData loginData) throws InterruptedException {
         WebElement iframe = driver.findElement(By.id("oauth-iframe"));
         driver.switchTo().frame(iframe);
         type(By.id("username"), loginData.getUsername());
         type(By.id("password"), loginData.getPassword());
         click(By.id("login"));
         driver.switchTo().defaultContent();
-        WebDriverWait wait = new WebDriverWait(driver, 15);
-        wait.until(ExpectedConditions.elementToBeClickable(By.className("owl-item")));
+        Thread.sleep(1000);
+//        WebDriverWait wait = new WebDriverWait(driver, 15);
+//        wait.until(ExpectedConditions.elementToBeClickable(By.className("owl-item")));
     }
 
     private void type(By locator, String text) {
